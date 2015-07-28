@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package piecer;
+
+message ReadRequest {
+
+};
+
+message ReadResponse {
+};
+
+service Piecer {
+  rpc Read(ReadRequest) returns (ReadResponse);
+}
