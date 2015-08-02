@@ -3,12 +3,50 @@ syntax = "proto3";
 package piecer;
 
 message ReadRequest {
+  // Path to piecer file.
+  string path = 1;
 
+  // Offset from which to start reading.
+  int64 offset = 2;
+
+  // Maximum number of bytes to read.
+  int64 count = 3;
 };
 
 message ReadResponse {
+  bytes data = 1;
+  int64 count = 2;
+
+  enum ReadError {
+    OK = 0;
+    FILE_NOT_FOUND = 1;
+    END_OF_FILE = 2;
+  }
+  ReadError error = 4;
+};
+
+message WriteRequest {
+  string path = 1;
+  bytes data = 2;
+
+  enum Mode {
+    CREATE = 0;
+    APPEND = 1;
+  }
+  Mode mode = 3;
+};
+
+message WriteResponse {
+  enum WriteError {
+    OK = 0;
+    FILE_NOT_FOUND = 1;
+    FILE_EXISTS = 2;
+  }
+
+  WriteError error = 1;
 };
 
 service Piecer {
   rpc Read(ReadRequest) returns (ReadResponse);
+  rpc Write(WriteRequest) returns (WriteResponse);
 }
